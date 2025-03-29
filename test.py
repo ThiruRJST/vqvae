@@ -29,7 +29,7 @@ trainloader, testloader = get_cifar10_loader(batch_size)
 model = VQVAE(
     n_hidden, n_residual_hidden, n_residual_layers, n_embeddings, embedding_dim, beta
 ).to(device)
-model.load_state_dict(torch.load("best_models/v5/vqvae_model_aircraft_v5_loss_0.0121.pth"))
+model.load_state_dict(torch.load("best_models/v5/vqvae_model_aircraft_v5_loss_0.0053.pth"))
 model.eval()
 
 pbar = tqdm(enumerate(testloader), total=len(testloader))
@@ -60,4 +60,7 @@ for i, (x, _) in pbar:
         Image.fromarray((original_image * 255).astype(np.uint8)),
         Image.fromarray((gen_image * 255).astype(np.uint8))
     )
-    mlflow.log_image(concat_image, f"image_{i}.png")
+    concat_image.save(f"results/test_{i}.png")
+
+    if i == 10:
+        break
